@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oldeighthome.heavennote.mapper.FollowMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.oldeighthome.heavennote.entity.Follow">
+        <id column="id" property="id" />
+        <result column="author_id" property="authorId" />
+        <result column="follow_id" property="followId" />
+        <result column="follow_name" property="followName" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, author_id, follow_id, follow_name
+    </sql>
+
+</mapper>
