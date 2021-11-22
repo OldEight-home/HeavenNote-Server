@@ -37,9 +37,13 @@ public class WxAuthServiceImpl extends ServiceImpl<UserMapper, User> implements 
     @Override
     public ApiResult getWxSession(Map<String, String> wxLoginData) {
         WxSessionModel wxSessionModel=getInfoFromWxServer(wxLoginData.get(GlobalValue.CODE));
-        if (wxSessionModel.getErrcode() != null) {
-            log.error("登录出错");
-            return ApiResult.error("登录出错",wxSessionModel.getErrmsg());
+        if(wxSessionModel==null){
+            log.error("登录出错，未找到用户");
+            return ApiResult.error("登录出错，未找到用户");
+        }
+        else if (wxSessionModel.getErrcode() != null) {
+            log.error("登录出错，错误信息:{}",wxSessionModel.getErrcode());
+            return ApiResult.error(String.format("登录出错，错误信息:%s",wxSessionModel.getErrmsg()),wxSessionModel.getErrmsg());
         }
         log.info("openid: {}", wxSessionModel.getOpenid());
         String openId=wxSessionModel.getOpenid();
@@ -68,10 +72,10 @@ public class WxAuthServiceImpl extends ServiceImpl<UserMapper, User> implements 
         }
         //生成token
         String token= jwtTokenUtil.generateToken(nickName);
-        log.info("token是:{}",token);
+        log.info("用户的token是:{}",token);
         Map<String,String> map=new HashMap<>();
         map.put("token",token);
-        ApiResult result=ApiResult.success("登录成功了",map);
+        ApiResult result=ApiResult.success("登录成功",map);
         return result;
     }
 

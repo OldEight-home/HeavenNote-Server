@@ -83,18 +83,16 @@ public class JwtTokenUtil {
 
     }
 
+
     /**
-     * 判断token是否有效，要求检验用户信息的名字是否与token中解析的名字相同以及token是否过期
+     * 由token
      * @param token
-     * @param userDetails
      * @return
      */
-    /*
-    public  boolean validateToken(String token, UserDetails userDetails){
-        String userName=getUserNameFromToken(token);
-        return  userName.equals(userDetails.getUsername())&& !isTokenExpired(token);
+    public Claims validateToken(String token){
+        Claims claims = getClaimsFromToken(token);
+        return claims;
     }
-*/
     private  Date getExpiredDateFromToken(String token){
         Claims claims=getClaimsFromToken(token);
         return claims.getExpiration();
