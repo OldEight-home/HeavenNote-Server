@@ -10,6 +10,7 @@ public class GlobalValue {
     public static final String GRANT_TYPE="grand_type";
     public static final String AUTHORIZATION_CODE= "authorization_code";
     public static final String WX_SESSION_ADDRESS="https://api.weixin.qq.com/sns/jscode2session";
-    public static final String ENCRYPTEDDATA="encryptedData";
+    public static final String ENCRYPTEDDATA="encrypted_data";
     public static final String IV="iv";
+    public static final String CODE="code";
 }

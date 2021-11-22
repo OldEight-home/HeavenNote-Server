@@ -18,7 +18,7 @@ spring:
         min-idle: 5
   datasource:
     username: root
-    password: 123456
+    password:
     url: jdbc:mysql://localhost:3306/heaven_note?characterEncoding=utf8&useSSL=false&serverTimezone=UTC
     driver-class-name: com.mysql.cj.jdbc.Driver
     type: com.alibaba.druid.pool.DruidDataSource
@@ -28,16 +28,16 @@ mybatis-plus:
   #配置Mapper映射文件
   mapper-locations: classpath*:/mapper/*Mapper.xml
   # 配置MyBatis数据返回类型别名（默认别名是类名）
-  type-aliases-package: com.project.data_cloud_server.entity
+  type-aliases-package: com.oldeighthome.heavennote.entity
   configuration:
     # 自动驼峰命名
     map-underscore-to-camel-case: false
 ## Mybatis SQL 打印(方法接口所在的包，不是Mapper.xml所在的包)
 logging:
   level:
-    com.project.data_cloud_server.mapper: debug
+    com.oldeighthome.heavennote.mapper: debug
   file:
-    path: /www/data_cloud/data_cloud_back/logs
+    path: /www/heaven_note/heaven_note_server/logs
 jwt:
   # JWT存储的请求头
   tokenHeader: Authorization

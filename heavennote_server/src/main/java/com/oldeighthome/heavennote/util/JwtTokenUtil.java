@@ -18,17 +18,17 @@ public class JwtTokenUtil {
     private static final String CLAIM_KEY_CREATE="created";
     //jwt令牌的密钥
     @Value("${jwt.secret}")
-    private static String secret;
+    private  String secret;
     //jwt过期时间
     @Value("${jwt.expiration}")
-    private static Long expiration;
+    private  Long expiration;
 
     /**
      * 根据用户名生成token
      * @param userName
      * @return
      */
-    public static String generateToken(String userName){
+    public  String generateToken(String userName){
         Map<String,Object> claims=new HashMap<>();
         claims.put(CLAIM_KEY_USERNAME,userName);
         claims.put(CLAIM_KEY_CREATE,new Date());
@@ -40,7 +40,7 @@ public class JwtTokenUtil {
      * @param claims
      * @return
      */
-    private static String generateToken(Map<String,Object> claims){
+    private  String generateToken(Map<String,Object> claims){
         return Jwts.builder()
                     .setClaims(claims)
                     .setExpiration(generateExpiration())
@@ -48,7 +48,7 @@ public class JwtTokenUtil {
                     .compact();
     }
 
-    private static Date generateExpiration() {
+    private Date generateExpiration() {
         return new Date(System.currentTimeMillis()+expiration*1000);
     }
 
@@ -57,7 +57,7 @@ public class JwtTokenUtil {
      * @param token
      * @return
      */
-    public static String getUserNameFromToken(String token){
+    public  String getUserNameFromToken(String token){
         String userName;
         try{
             Claims claims=getClaimsFromToken(token);
@@ -69,7 +69,7 @@ public class JwtTokenUtil {
 
     }
 
-    private static Claims getClaimsFromToken(String token) {
+    private Claims getClaimsFromToken(String token) {
         Claims claims=null;
         try{
             claims = Jwts.parser()
@@ -90,12 +90,12 @@ public class JwtTokenUtil {
      * @return
      */
     /*
-    public static boolean validateToken(String token, UserDetails userDetails){
+    public  boolean validateToken(String token, UserDetails userDetails){
         String userName=getUserNameFromToken(token);
         return  userName.equals(userDetails.getUsername())&& !isTokenExpired(token);
     }
 */
-    private static Date getExpiredDateFromToken(String token){
+    private  Date getExpiredDateFromToken(String token){
         Claims claims=getClaimsFromToken(token);
         return claims.getExpiration();
     }
@@ -105,7 +105,7 @@ public class JwtTokenUtil {
      * @param token
      * @return
      */
-    public static boolean canRefresh(String token){
+    public  boolean canRefresh(String token){
         return  !isTokenExpired(token);
     }
 
@@ -114,13 +114,13 @@ public class JwtTokenUtil {
      * @param token
      * @return
      */
-    public static String refreshToken(String token){
+    public  String refreshToken(String token){
         Claims claims=getClaimsFromToken(token);
         claims.put(CLAIM_KEY_CREATE,new Date());
         return generateToken(claims);
     }
 
-    private static boolean isTokenExpired(String token){
+    private  boolean isTokenExpired(String token){
         return getExpiredDateFromToken(token).before(new Date());
     }
 
