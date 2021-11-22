@@ -1,5 +1,6 @@
 package com.oldeighthome.heavennote.service.impl;
 
+import com.oldeighthome.heavennote.common.api.ApiResult;
 import com.oldeighthome.heavennote.entity.Note;
 import com.oldeighthome.heavennote.mapper.NoteMapper;
 import com.oldeighthome.heavennote.service.INoteService;
@@ -17,4 +18,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class NoteServiceImpl extends ServiceImpl<NoteMapper, Note> implements INoteService {
 
+    @Override
+    public ApiResult getPersonalNote() {
+        return null;
+    }
 }

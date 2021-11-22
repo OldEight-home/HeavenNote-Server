@@ -19,6 +19,5 @@ public class ResponseUtil {
         printWriter.write(json);
         printWriter.flush();
         printWriter.close();
-
     }
 }

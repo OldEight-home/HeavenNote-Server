@@ -4,11 +4,10 @@ import com.oldeighthome.heavennote.common.api.ApiResult;
 import com.oldeighthome.heavennote.service.WxAuthService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.ServletRequest;
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,6 +22,11 @@ public class WxAuthController {
     public ApiResult createSession(@RequestBody Map<String, String> wxLoginData){
         return wxAuthService.getWxSession(wxLoginData);
     }
-
+    @GetMapping("/test")
+    public ApiResult test(ServletRequest request){
+        HttpServletRequest res= (HttpServletRequest) request;
+        log.info(res.getHeader("token"));
+        return ApiResult.success("通过");
+    }
 
 }

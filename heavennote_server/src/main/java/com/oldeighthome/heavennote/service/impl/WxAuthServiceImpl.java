@@ -71,7 +71,7 @@ public class WxAuthServiceImpl extends ServiceImpl<UserMapper, User> implements 
 
         }
         //生成token
-        String token= jwtTokenUtil.generateToken(nickName);
+        String token= jwtTokenUtil.generateToken(openId);
         log.info("用户的token是:{}",token);
         Map<String,String> map=new HashMap<>();
         map.put("token",token);
