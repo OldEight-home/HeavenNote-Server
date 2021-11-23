@@ -1,6 +1,6 @@
 package com.oldeighthome.heavennote.config.web;
 
-import com.oldeighthome.heavennote.common.handler.JwtHandler;
+//import com.oldeighthome.heavennote.common.handler.JwtHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
@@ -21,15 +21,20 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .maxAge(1800)
                 .allowedOrigins("*");
     }
+    /*
     @Bean
     public JwtHandler getJwtHandler(){
         return new JwtHandler();
     }
+    */
 
+/*
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(getJwtHandler())
                 .addPathPatterns("/**")
                 .excludePathPatterns("/api/v1/wx/session","/api/v1/wx/test");
     }
+    */
+
 }

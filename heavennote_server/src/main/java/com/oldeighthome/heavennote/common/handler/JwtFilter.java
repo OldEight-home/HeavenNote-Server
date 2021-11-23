@@ -42,11 +42,13 @@ public class JwtFilter implements Filter {
         }
         else {
             String token=request.getHeader("token");
-            PrintWriter printWriter= ResponseUtil.getPrintWriter(response);
+
             ApiResult result;
             if(token==null){
                 result=ApiResult.error("没有收到token");
+                PrintWriter printWriter= ResponseUtil.getPrintWriter(response);
                 ResponseUtil.output(printWriter,result);
+                return;
             }
             log.info("过滤器收到的token是:{}",token);
             Claims claims=jwtTokenUtil.validateToken(token);
@@ -54,7 +56,9 @@ public class JwtFilter implements Filter {
                 String errMes="token验证失败，用户尚未登录";
                 log.error(errMes);
                 result= ApiResult.error(errMes);
+                PrintWriter printWriter= ResponseUtil.getPrintWriter(response);
                 ResponseUtil.output(printWriter,result);
+                return;
             }
             //正确的token
             HeaderMapRequestWrapper requestWrapper=new HeaderMapRequestWrapper(request);
