@@ -34,30 +34,40 @@ public class NoteController {
     @GetMapping("/show")
     public ApiResult getPersonalNote(HeaderMapRequestWrapper request){
         String id=request.getHeader("id");
-        List<Note> notes= noteService.getPersonalNote(id);
+        List<Map<String,Object>> notes= noteService.getPersonalNote(id);
+
         ApiResult result=ApiResult.success(notes);
         return result;
     }
+    @PostMapping("/showDetail")
+    public ApiResult getNoteDetail(@RequestBody Map<String,String> data){
+        String noteId=data.get("noteId");
+        Map<String,Object> responseData= noteService.getNoteDetail(noteId);
+        ApiResult result=ApiResult.success(responseData);
+        return result;
+    }
     @PostMapping("/communityPage")
-    public ApiResult showInCommunityPage(@RequestBody Map<String,Integer> data){
-        IPage<Note> noteIPage = noteService.showNoteInCommunityPage(data.get("currentPage"), data.get("size"));
-        if(noteIPage!=null){
-            return ApiResult.success(noteIPage.getRecords());
+    public ApiResult showInCommunityPage(HeaderMapRequestWrapper request,@RequestBody Map<String,Integer> data){
+        String id=request.getHeader("id");
+        Map<String,Object> map = noteService.showNoteInCommunityPage(data.get("currentPage"), data.get("size"),id);
+        if(map!=null){
+            return ApiResult.success(map);
         }
         else{
             return ApiResult.error("查询失败，服务器内部出错");
         }
 
     }
-    @GetMapping("/community")
-    public ApiResult showInCommunity(){
 
-        return null;
-    }
     @PostMapping("/add")
     public ApiResult addNote(HeaderMapRequestWrapper request, @RequestBody Note note){
         String id=request.getHeader("id");
         return noteService.addNote(id,note);
     }
+    @PostMapping("/edit")
+    public ApiResult editNote(HeaderMapRequestWrapper request,@RequestBody Note note){
+        String id=request.getHeader("id");
+        return noteService.editNote(id,note);
 
+    }
 }
