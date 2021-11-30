@@ -14,7 +14,15 @@
         <result column="update_time" property="updateTime" />
         <result column="is_public" property="isPublic" />
     </resultMap>
-
+    <!--自定义查询笔记列表映射结果-->
+    <resultMap id="NoteListMap" type="java.util.Map">
+        <id column="note_id" property="noteId"/>
+        <result column="title" property="title"/>
+        <result column="description" property="description"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="is_public" property="isPublic"/>
+        <result column="note_count" property="noteCount"/>
+    </resultMap>
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
         note_id, author_id, title, description, content, note_count, create_time, update_time, is_public

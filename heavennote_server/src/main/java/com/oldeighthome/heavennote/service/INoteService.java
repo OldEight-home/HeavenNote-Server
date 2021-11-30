@@ -6,6 +6,7 @@ import com.oldeighthome.heavennote.entity.Note;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -16,8 +17,9 @@ import java.util.List;
  * @since 2021-11-21
  */
 public interface INoteService extends IService<Note> {
-    public List<Note> getPersonalNote(String id);
+    public List<Map<String,Object>> getPersonalNote(String id);
     public ApiResult addNote(String id,Note note);
-    public IPage<Note> showNoteInCommunityPage(Integer currentPage,Integer size);
-    public List<Note> showNoteInCommunity();
+    public Map<String,Object> showNoteInCommunityPage(Integer currentPage,Integer size,String id);
+    public Map<String,Object> getNoteDetail(String noteId);
+    public ApiResult editNote(String id,Note note);
 }
