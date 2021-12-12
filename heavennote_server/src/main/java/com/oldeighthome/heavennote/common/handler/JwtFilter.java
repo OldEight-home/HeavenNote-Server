@@ -28,13 +28,14 @@ public class JwtFilter implements Filter {
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
     private static final Set<String> ALLOWED_PATHS = Collections.unmodifiableSet(new HashSet<>(
-            Arrays.asList("/api/v1/wx/session")));
+            Arrays.asList("/api/v1/wx/session","/api/v1/note/communityPage")));
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
         String path = request.getRequestURI().substring(request.getContextPath().length()).replaceAll("[/]+$", "");
+
         boolean allowedPath = ALLOWED_PATHS.contains(path);
 
         if (allowedPath) {

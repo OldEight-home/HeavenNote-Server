@@ -4,8 +4,10 @@ package com.oldeighthome.heavennote.controller;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.oldeighthome.heavennote.common.api.ApiResult;
+import com.oldeighthome.heavennote.common.exception.CustomSqlException;
 import com.oldeighthome.heavennote.common.web.HeaderMapRequestWrapper;
 import com.oldeighthome.heavennote.entity.Note;
+import com.oldeighthome.heavennote.entity.vo.NoteInfoVo;
 import com.oldeighthome.heavennote.service.INoteService;
 import com.oldeighthome.heavennote.util.ResponseUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -47,14 +49,13 @@ public class NoteController {
         return result;
     }
     @PostMapping("/communityPage")
-    public ApiResult showInCommunityPage(HeaderMapRequestWrapper request,@RequestBody Map<String,Integer> data){
-        String id=request.getHeader("id");
-        Map<String,Object> map = noteService.showNoteInCommunityPage(data.get("currentPage"), data.get("size"),id);
-        if(map!=null){
-            return ApiResult.success(map);
+    public ApiResult showInCommunityPage(@RequestBody Map<String,Integer> data){
+        List<NoteInfoVo> noteInfoVoList = noteService.showNoteInCommunityPage(data.get("currentPage"), data.get("size"));
+        if(noteInfoVoList!=null){
+            return ApiResult.success(noteInfoVoList);
         }
         else{
-            return ApiResult.error("查询失败，服务器内部出错");
+            throw  new CustomSqlException("查询失败，服务器内部出错");
         }
 
     }
@@ -68,6 +69,11 @@ public class NoteController {
     public ApiResult editNote(HeaderMapRequestWrapper request,@RequestBody Note note){
         String id=request.getHeader("id");
         return noteService.editNote(id,note);
-
     }
+    @PostMapping("/delete")
+    public ApiResult deleteNote(HeaderMapRequestWrapper request,@RequestBody Map<String,String> data){
+        String id=request.getHeader("id");
+        return noteService.deleteNote(id,data.get("noteId"));
+    }
+
 }

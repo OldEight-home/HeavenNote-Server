@@ -5,8 +5,10 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.oldeighthome.heavennote.common.api.ApiResult;
+import com.oldeighthome.heavennote.common.exception.CustomSqlException;
 import com.oldeighthome.heavennote.entity.Note;
 import com.oldeighthome.heavennote.entity.User;
+import com.oldeighthome.heavennote.entity.vo.NoteInfoVo;
 import com.oldeighthome.heavennote.mapper.NoteMapper;
 import com.oldeighthome.heavennote.mapper.UserMapper;
 import com.oldeighthome.heavennote.service.INoteService;
@@ -18,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -43,7 +46,8 @@ public class NoteServiceImpl extends ServiceImpl<NoteMapper, Note> implements IN
             "note_id as noteId",
             "title",
             "description",
-            "note_count as noteCount"};
+            "note_count as noteCount",
+            "author_id as authorId"};
     private String[] columnToShowDetail={
             "content"
     };
@@ -55,7 +59,6 @@ public class NoteServiceImpl extends ServiceImpl<NoteMapper, Note> implements IN
                 .eq("author_id", id));
                 */
         List<Map<String,Object>> notes=noteMapper.getDisplayNoteList(id);
-
         return notes;
 
     }
@@ -80,18 +83,12 @@ public class NoteServiceImpl extends ServiceImpl<NoteMapper, Note> implements IN
     }
 
     @Override
-    public Map<String,Object> showNoteInCommunityPage( Integer currentPage,Integer size,String id) {
-        log.info(currentPage+"  "+size);
-        Map<String,Object> map=new HashMap<>();
-        User user = userMapper.selectOne(new QueryWrapper<User>().eq("user_id", id));
-
+    public List<NoteInfoVo> showNoteInCommunityPage( Integer currentPage,Integer size) {
         Page<Note> page =new Page<>(currentPage,size);
         Page<Note> notePage = noteMapper.selectPage(page, new QueryWrapper<Note>().orderByDesc("update_time")
                 .select(columnToShowInNoteList));
-        map.put("userName",user.getUsername());
-        map.put("userAvatar",user.getAvatar());
-        map.put("noteInfo",notePage.getRecords());
-        return map;
+        List<Note> records = notePage.getRecords();
+        return getNoteInfoVoList(records);
 
     }
 
@@ -118,13 +115,50 @@ public class NoteServiceImpl extends ServiceImpl<NoteMapper, Note> implements IN
             return ApiResult.success(success);
         }
         else{
-            String error="更改失败,服务器内部错误";
-            log.error(error);
-            return ApiResult.error(error);
+            throw new CustomSqlException("更改失败,服务器内部错误");
         }
 
     }
+
+    @Override
+    public ApiResult deleteNote(String id, String noteId) {
+        boolean isRemove = remove(new QueryWrapper<Note>().eq("author_id", id).eq("note_id", noteId));
+        if(isRemove){
+            return ApiResult.success("笔记删除成功");
+        }
+        else {
+            throw new CustomSqlException("删除失败，访问数据库出错");
+        }
+    }
+
+    /**
+     * 截取笔记内容的介绍
+     * @param content
+     * @return
+     */
     private String subDescription(String content){
         return content.length()>=15? content.substring(0,15) : content;
     }
+
+    /**
+     * 通过note的authorId查询用户相关信息
+     * @param noteList
+     * @return
+     */
+    private List<NoteInfoVo> getNoteInfoVoList(List<Note> noteList){
+        List<NoteInfoVo> noteInfoVoList=new ArrayList<>();
+        for(Note note:noteList){
+            User user = userMapper.selectOne(new QueryWrapper<User>().eq("user_id", note.getAuthorId()));
+            NoteInfoVo noteInfoVo=new NoteInfoVo();
+            noteInfoVo.setNoteId(note.getNoteId())
+                    .setDescription(note.getDescription())
+                    .setTitle(note.getTitle())
+                    .setUpdateTime(note.getUpdateTime())
+                    .setUserName(user.getUsername())
+                    .setUserAvatar(user.getAvatar());
+            noteInfoVoList.add(noteInfoVo);
+        }
+        return noteInfoVoList;
+    }
+
 }

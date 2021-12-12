@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.oldeighthome.heavennote.common.api.ApiResult;
 import com.oldeighthome.heavennote.entity.Note;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.oldeighthome.heavennote.entity.vo.NoteInfoVo;
 
 import java.util.List;
 import java.util.Map;
@@ -19,7 +20,9 @@ import java.util.Map;
 public interface INoteService extends IService<Note> {
     public List<Map<String,Object>> getPersonalNote(String id);
     public ApiResult addNote(String id,Note note);
-    public Map<String,Object> showNoteInCommunityPage(Integer currentPage,Integer size,String id);
+    public List<NoteInfoVo> showNoteInCommunityPage(Integer currentPage, Integer size);
     public Map<String,Object> getNoteDetail(String noteId);
     public ApiResult editNote(String id,Note note);
+    public ApiResult deleteNote(String id,String noteId);
+
 }
