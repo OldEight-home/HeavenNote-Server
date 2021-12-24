@@ -28,7 +28,9 @@ public class JwtFilter implements Filter {
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
     private static final Set<String> ALLOWED_PATHS = Collections.unmodifiableSet(new HashSet<>(
-            Arrays.asList("/api/v1/wx/session","/api/v1/note/communityPage")));
+            Arrays.asList("/api/v1/wx/session",
+                    "/api/v1/note/communityPage",
+                    "/api/v1/note/showDetail")));
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
@@ -43,7 +45,6 @@ public class JwtFilter implements Filter {
         }
         else {
             String token=request.getHeader("token");
-
             ApiResult result;
             if(token==null){
                 result=ApiResult.error("没有收到token");

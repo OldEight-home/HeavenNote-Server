@@ -75,5 +75,8 @@ public class NoteController {
         String id=request.getHeader("id");
         return noteService.deleteNote(id,data.get("noteId"));
     }
-
+    @GetMapping("/verify")
+    public ApiResult verify(){
+        return ApiResult.success();
+    }
 }

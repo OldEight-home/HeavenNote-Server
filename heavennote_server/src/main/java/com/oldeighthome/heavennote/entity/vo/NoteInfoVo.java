@@ -15,5 +15,6 @@ public class NoteInfoVo {
     private String description;
     private String title;
     private String noteId;
-    private LocalDateTime updateTime;
+    private int noteCount;
+    private String updateTime;
 }
