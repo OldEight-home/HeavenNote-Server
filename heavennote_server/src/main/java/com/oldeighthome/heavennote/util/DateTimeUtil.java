@@ -13,4 +13,8 @@ public class DateTimeUtil {
         DateTimeFormatter dateTimeFormatter =DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         return  localDateTime.format(dateTimeFormatter);
     }
+    public static String timeToStringBrief(LocalDateTime localDateTime){
+        DateTimeFormatter dateTimeFormatter =DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        return  localDateTime.format(dateTimeFormatter);
+    }
 }
